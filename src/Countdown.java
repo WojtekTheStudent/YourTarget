@@ -15,7 +15,7 @@ public class Countdown extends JPanel {
         time = 0;
         tm = new JLabel();
         tm.setText(100 - (time / 100) + " ");
-        tm.setFont(new Font("Monospaced", Font.BOLD, 50));
+        tm.setFont(new Font("Monospaced", Font.BOLD, 0));
         tm.setForeground(Color.WHITE);
         Dimension size = tm.getPreferredSize();
         //tm.setBounds(540, 200, size.width, size.height);
@@ -42,5 +42,9 @@ public class Countdown extends JPanel {
         time = 0;
         tm.setText(time + " ");
         end = false;
+    }
+
+    public String getStringTime() {
+        return tm.getText();
     }
 }

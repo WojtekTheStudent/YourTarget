@@ -40,6 +40,7 @@ public class Board extends JFrame implements ActionListener {
         this.setLocation(gameX, gameY);
         this.setVisible(true);
 
+
         //create the countdown
         Countdown cd = new Countdown();
 
