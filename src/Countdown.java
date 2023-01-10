@@ -4,21 +4,26 @@ import java.awt.*;
 public class Countdown extends JPanel {
     //variables
     private int time;
+
     //final score
     private final int TIME_MAX = 10000;
+
     //determine the winners
     private boolean end = false;
+
     private JLabel tm;
 
     //constructor
     public Countdown() {
         time = 0;
+
         tm = new JLabel();
         tm.setText(100 - (time / 100) + " ");
         tm.setFont(new Font("Monospaced", Font.BOLD, 0));
         tm.setForeground(Color.WHITE);
         Dimension size = tm.getPreferredSize();
         //tm.setBounds(540, 200, size.width, size.height);
+
         this.setOpaque(false);
         this.add(tm);
     }

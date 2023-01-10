@@ -45,15 +45,15 @@ public class Board extends JFrame implements ActionListener {
         Countdown cd = new Countdown();
 
         //create the menu
-        JMenuBar menubar = new JMenuBar();
-        JMenu file = new JMenu("Game");
-        menubar.add(file);
+        //JMenuBar menubar = new JMenuBar();
+        //JMenu file = new JMenu("Game");
+        //menubar.add(file);
 
-        fileRestart = new JMenuItem("Restart");
-        fileRestart.addActionListener(this);
-        file.add(fileRestart);
+        //fileRestart = new JMenuItem("Restart");
+        //fileRestart.addActionListener(this);
+        //file.add(fileRestart);
 
-        this.setJMenuBar(menubar);
+        //this.setJMenuBar(menubar);
 
         //draw the components
         screen = new Screen(cd, this);
