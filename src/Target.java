@@ -97,7 +97,7 @@ public class Target {
         double difX = centerX - x;
         double difY = centerY - y;
         double distance = Math.sqrt((difX * difX) + (difY * difY));
-        if (distance > r) return false;
+        if (distance > r || this.color != Color.GREEN) return false;
         return true;
     }
 

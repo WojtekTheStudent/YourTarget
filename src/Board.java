@@ -34,28 +34,15 @@ public class Board extends JFrame implements ActionListener {
 
         //set frame information
         this.setSize(WIDTH, HEIGHT);
-        ;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocation(gameX, gameY);
         this.setVisible(true);
-
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
         //create the countdown
         Countdown cd = new Countdown();
 
-        //create the menu
-        //JMenuBar menubar = new JMenuBar();
-        //JMenu file = new JMenu("Game");
-        //menubar.add(file);
-
-        //fileRestart = new JMenuItem("Restart");
-        //fileRestart.addActionListener(this);
-        //file.add(fileRestart);
-
-        //this.setJMenuBar(menubar);
-
-        //draw the components
         screen = new Screen(cd, this);
         this.getContentPane().add(screen);
     }

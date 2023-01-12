@@ -1,3 +1,6 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -7,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.AttributedString;
 import java.util.Random;
-
 
 public class Screen extends JPanel implements Runnable, MouseListener {
 
@@ -21,6 +23,8 @@ public class Screen extends JPanel implements Runnable, MouseListener {
     private double reactionTime = -1;
     private long st;
     private int[] t;
+    private int interspace = 100;
+    private int first = 140;
 
     private Thread thread;
     private boolean end = false;
@@ -86,9 +90,33 @@ public class Screen extends JPanel implements Runnable, MouseListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Image background = new ImageIcon("dedust24.png").getImage();
-        if (!g2.drawImage(background, 0, 0, this)) {
-            System.out.println("Error with background");
+        switch (lvl) {
+
+            case (1): {
+                Image background = new ImageIcon("dedust24.png").getImage();
+                if (!g2.drawImage(background, 0, 0, this)) System.out.println("Error with background 1");
+                break;
+            }
+            case (2): {
+                Image background = new ImageIcon("WESTERN.png").getImage();
+                if (!g2.drawImage(background, 0, 0, this)) System.out.println("Error with background 2");
+                break;
+            }
+            case (3): {
+                Image background = new ImageIcon("MIRAGE.png").getImage();
+                if (!g2.drawImage(background, 0, 0, this)) System.out.println("Error with background 3");
+                break;
+            }
+            case (4): {
+                Image background = new ImageIcon("DUST2_1.6.png").getImage();
+                if (!g2.drawImage(background, 0, 0, this)) System.out.println("Error with background 4");
+                break;
+            }
+            case (5): {
+                Image background = new ImageIcon("REFLEX.png").getImage();
+                if (!g2.drawImage(background, 0, 0, this)) System.out.println("Error with background 5");
+                break;
+            }
         }
 
         for (int i = 0; i < dificulty; i++)
@@ -104,7 +132,7 @@ public class Screen extends JPanel implements Runnable, MouseListener {
         int outline = 5;
         g2.setColor(Color.BLACK);
         g2.fillRect(tmp1 + outline, 0 + outline, 1024 - tmp1 - (outline * 5) + 1, 768 - (outline * 14));
-        g2.fillRect(0 + outline, tmp2 + outline, 1024 - (outline * 5), 100 - (outline * 14));
+        g2.fillRect(0 + outline, tmp2 + outline, 1024 - (outline * 5), 100 - (outline * 9));
 
         Image menu = new ImageIcon("MENU.png").getImage();
         if (!g2.drawImage(menu, tmp1 + outline, 5, this)) {
@@ -119,21 +147,29 @@ public class Screen extends JPanel implements Runnable, MouseListener {
             System.out.println("Error with time image");
         }
 
-        g2.setColor(Color.CYAN);
-        AttributedString as = new AttributedString(timer.getStringTime());
-        as.addAttribute(TextAttribute.SIZE, 80);
-        g2.drawString(as.getIterator(), 820, 600);
+        g2.setColor(Color.WHITE);
+        AttributedString as;
+        as = new AttributedString("Level: " + lvl);
+        as.addAttribute(TextAttribute.SIZE, 40);
+        g2.drawString(as.getIterator(), outline, tmp2 + outline + 40);
 
-        as = new AttributedString(Integer.toString(hitCount));
-        as.addAttribute(TextAttribute.SIZE, 80);
-        g2.drawString(as.getIterator(), 820, 380);
+        if (lvl != 5) {
+            g2.setColor(Color.WHITE);
+            as = new AttributedString(timer.getStringTime());
+            as.addAttribute(TextAttribute.SIZE, 80);
+            g2.drawString(as.getIterator(), 835, 600);
+
+            as = new AttributedString(Integer.toString(hitCount));
+            as.addAttribute(TextAttribute.SIZE, 80);
+            g2.drawString(as.getIterator(), 860, 380);
+        }
 
         if (start) {
-            g2.setColor(Color.GRAY);
+            g2.setColor(Color.BLACK);
             g2.fillRect(0, 0, 1024, 768);
             g2.setColor(Color.WHITE);
             for (int i = 0; i < 5; i++) {
-                int tmp = 70 + (50 * i);
+                int tmp = first + (interspace * i);
                 if (i < 4) {
                     as = new AttributedString("Level " + (i + 1));
                     as.addAttribute(TextAttribute.SIZE, 40);
@@ -144,45 +180,58 @@ public class Screen extends JPanel implements Runnable, MouseListener {
                 g2.fillRect(10, tmp + 10 - 45, 2, 45);
                 g2.fillRect(10 + 130 - 2, tmp + 10 - 45, 2, 45);
             }
-            as = new AttributedString("Benchmark");
+            as = new AttributedString("Reflex");
             as.addAttribute(TextAttribute.SIZE, 40);
-            g2.drawString(as.getIterator(), 10, 70 + 50 * 4);
+            g2.drawString(as.getIterator(), 17, first + interspace * 4);
+
+            Image background = new ImageIcon("target2.png").getImage();
+            if (!g2.drawImage(background, 170, 0, this)) System.out.println("Error with target image");
         }
 
         if (nextLvl) {
-            g2.setColor(Color.GRAY);
+            g2.setColor(Color.BLACK);
             g2.fillRect(0, 0, 1024, 768);
             g2.setColor(Color.WHITE);
+            as = new AttributedString("Menu");
+            as.addAttribute(TextAttribute.SIZE, 40);
+            g2.drawString(as.getIterator(), 10, first);
             as = new AttributedString("Restart");
             as.addAttribute(TextAttribute.SIZE, 40);
-            g2.drawString(as.getIterator(), 10, 70);
-            int x = 2;
+            g2.drawString(as.getIterator(), 10, first + interspace);
+            int x = 3;
             if (lvl != 4) {
-                as = new AttributedString("Next level");
+                as = new AttributedString("Next");
                 as.addAttribute(TextAttribute.SIZE, 40);
-                g2.drawString(as.getIterator(), 10, 70 + 50);
+                g2.drawString(as.getIterator(), 10, first + interspace * 2);
             } else x--;
             for (int i = 0; i < x; i++) {
-                int tmp = 70 + (50 * i);
+                int tmp = first + (interspace * i);
                 g2.fillRect(10, tmp + 10 - 45, 130, 2);
                 g2.fillRect(10, tmp + 10, 130, 2);
                 g2.fillRect(10, tmp + 10 - 45, 2, 45);
                 g2.fillRect(10 + 130 - 2, tmp + 10 - 45, 2, 45);
             }
+            Image background = new ImageIcon("target2.png").getImage();
+            if (!g2.drawImage(background, 170, 0, this)) System.out.println("Error with target image");
         }
 
         if (benchmarkEnd) {
-            g2.setColor(Color.GRAY);
+            g2.setColor(Color.BLACK);
             g2.fillRect(0, 0, 1024, 768);
             g2.setColor(Color.WHITE);
             as = new AttributedString("Restart");
             as.addAttribute(TextAttribute.SIZE, 40);
-            g2.drawString(as.getIterator(), 10, 70);
-            int tmp = 70;
+            g2.drawString(as.getIterator(), 10, first);
+            int tmp = first;
             g2.fillRect(10, tmp + 10 - 45, 130, 2);
             g2.fillRect(10, tmp + 10, 130, 2);
             g2.fillRect(10, tmp + 10 - 45, 2, 45);
             g2.fillRect(10 + 130 - 2, tmp + 10 - 45, 2, 45);
+            Image background = new ImageIcon("target2.png").getImage();
+            if (!g2.drawImage(background, 170, 0, this)) System.out.println("Error with target image");
+            as = new AttributedString(reactionTime + " ms!");
+            as.addAttribute(TextAttribute.SIZE, 30);
+            g2.drawString(as.getIterator(), 10, first + interspace);
         }
     }
 
@@ -222,16 +271,16 @@ public class Screen extends JPanel implements Runnable, MouseListener {
                     if (curX <= left || curX + (targets[i][j].getRadius() * 2) >= right) targets[i][j].bounceX();
                 }
 
-            if (t1 % 100 == 0) {
+            int delay1 = 40; //in between
+            int delay2 = 60; //green on
+            if (t1 % delay1 == 0) {
                 if (t2 == 0) selectRandomTarget();
                 t2++;
-                if (t2 == 100) {
+                if (t2 == delay2) {
                     t2 = 0;
                     t1++;
                 }
-            } else {
-                t1++;
-            }
+            } else t1++;
 
             timer.increment();
             repaint();
@@ -239,6 +288,18 @@ public class Screen extends JPanel implements Runnable, MouseListener {
             if (timer.isTimeUp()) {
                 end = true;
                 nextLvl = true;
+                if (lvl < 5) {
+                    t[lvl - 1] = hitCount;
+                    String s = "";
+                    for (int i = 0; i < 4; i++) {
+                        s += "Poziom ";
+                        s += i + 1;
+                        s += ".   Liczba punktów: ";
+                        s += t[i];
+                        s += "\n";
+                    }
+                    writeToFile("LevelScores.txt", s);
+                }
             }
         }
     }
@@ -285,7 +346,7 @@ public class Screen extends JPanel implements Runnable, MouseListener {
         if (start) {
             for (int i = 0; i < 5; i++) {
                 if (e.getX() >= 10 && e.getX() <= 130) {
-                    int tmp = 70 + (50 * i);
+                    int tmp = first + (interspace * i);
                     if (e.getY() >= tmp + 10 - 45 && e.getY() <= tmp + 10) lvl = i + 1;
                 }
             }
@@ -299,46 +360,60 @@ public class Screen extends JPanel implements Runnable, MouseListener {
         }
 
         if (nextLvl) {
-            int next = 0;
-            int x = 2;
-            if (lvl == 4) {
-                x--;
-                t[lvl - 1] = hitCount;
-                String s = "";
-                for (int i = 0; i < 4; i++) {
-                    s += "Poziom ";
-                    s += i;
-                    s += ".   Liczba punktów: ";
-                    s += t[i];
-                    s += "\n";
+            if (e.getX() >= 10 && e.getX() <= 130) {
+                int tmp = first;
+                if (e.getY() >= tmp + 10 - 45 && e.getY() <= tmp + 10) //menu
+                {
+                    nextLvl = false;
+                    start = true;
+                    repaint();
+                    return;
                 }
-                writeToFile("LevelScores.txt", s);
-            }
-            for (int i = 0; i < x; i++) {
-                if (e.getX() >= 10 && e.getX() <= 130) {
-                    int tmp = 70 + (50 * i);
-                    if (e.getY() >= tmp + 10 - 45 && e.getY() <= tmp + 10) next = i + 1;
+                tmp += interspace;
+                if (e.getY() >= tmp + 10 - 45 && e.getY() <= tmp + 10) //restart
+                {
+                    reset();
+                    nextLvl = false;
+                    return;
                 }
-            }
-            if (next == 1) {
-                reset();
-                nextLvl = false;
-            } else if (next == 2) {
-                t[lvl - 1] = hitCount;
-                lvl++;
-                setLvl();
-                reset();
-                nextLvl = false;
+                tmp += interspace;
+                if (e.getY() >= tmp + 10 - 45 && e.getY() <= tmp + 10 && lvl != 4) //next
+                {
+                    t[lvl - 1] = hitCount;
+                    lvl++;
+                    setLvl();
+                    reset();
+                    nextLvl = false;
+                    return;
+                }
             }
             return;
         }
 
         if (benchmarkEnd) {
-            int tmp = 70;
-            if (e.getX() >= 10 && e.getX() <= 130 && e.getY() >= tmp + 10 - 45 && e.getY() <= tmp + 10) {
+            if (e.getX() >= 10 && e.getX() <= 130 && e.getY() >= first + 10 - 45 && e.getY() <= first + 10) {
                 reset();
                 benchmarkEnd = false;
             }
+        }
+
+        if (e.getX() > (1024 * 3 / 4) + 15 && e.getX() < (1024 - 15) && e.getY() > 20 && e.getY() < 95) //menu button
+        {
+            start = true;
+            if (lvl < 5) {
+                t[lvl - 1] = hitCount;
+                String s = "";
+                for (int i = 0; i < 4; i++) {
+                    s += "Poziom ";
+                    s += i + 1;
+                    s += ".   Liczba punktów: ";
+                    s += t[i];
+                    s += "\n";
+                }
+                writeToFile("LevelScores.txt", s);
+                lvl = 0;
+            }
+            repaint();
         }
 
         if (lvl == 5) {
@@ -347,10 +422,10 @@ public class Screen extends JPanel implements Runnable, MouseListener {
                 reactionTime = (double) ((System.nanoTime() - st) / 1000000);
                 System.out.println("reaction: " + reactionTime);
                 String s = "";
-                s += "Rection time: ";
+                s += "Reaction time: ";
                 s += reactionTime;
                 s += "ms.";
-                writeToFile("RectionBenchmark", s);
+                writeToFile("ReactionBenchmark.txt", s);
                 benchmarkEnd = true;
                 repaint();
             }
@@ -360,13 +435,15 @@ public class Screen extends JPanel implements Runnable, MouseListener {
         for (int i = 0; i < targets.length; i++)
             for (int j = 0; j < targets[0].length; j++) {
                 if (targets[i][j].isHit(e.getX(), e.getY()) && i == (int) selectedTarget.x && j == (int) selectedTarget.y) {
+                    playSound("hitsound.wav");
                     targets[i][j].setColor(Color.RED);
                     t2 = 0;
                     t1++;
                     hitCount++;
-                    break;
+                    return;
                 }
             }
+        playSound("miss.wav");
         eventOutput("Mouse pressed, hitCount: " + hitCount, e);
         System.out.println("x: " + e.getX() + " y: " + e.getY());
     }
@@ -406,21 +483,25 @@ public class Screen extends JPanel implements Runnable, MouseListener {
         switch (lvl) {
             case (1): {
                 dificulty = 3;
+                targetSize = 20;
                 movement = false;
                 break;
             }
             case (2): {
                 dificulty = 4;
+                targetSize = 20;
                 movement = false;
                 break;
             }
             case (3): {
                 dificulty = 3;
+                targetSize = 20;
                 movement = true;
                 break;
             }
             case (4): {
                 dificulty = 4;
+                targetSize = 20;
                 movement = true;
                 break;
             }
@@ -441,5 +522,21 @@ public class Screen extends JPanel implements Runnable, MouseListener {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    public static synchronized void playSound(final String fileName) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            Main.class.getResourceAsStream(fileName));
+                    clip.open(inputStream);
+                    clip.start();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 }

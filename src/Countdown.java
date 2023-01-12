@@ -5,8 +5,7 @@ public class Countdown extends JPanel {
     //variables
     private int time;
 
-    //final score
-    private final int TIME_MAX = 10000;
+    private final int TIME_MAX = 10000 / 4;
 
     //determine the winners
     private boolean end = false;
@@ -18,7 +17,7 @@ public class Countdown extends JPanel {
         time = 0;
 
         tm = new JLabel();
-        tm.setText(100 - (time / 100) + " ");
+        tm.setText((TIME_MAX / 100) - (time / 100) + " ");
         tm.setFont(new Font("Monospaced", Font.BOLD, 0));
         tm.setForeground(Color.WHITE);
         Dimension size = tm.getPreferredSize();
@@ -33,9 +32,9 @@ public class Countdown extends JPanel {
         time++;
         if (time == TIME_MAX) {
             end = true;
-            tm.setText("Time is up!");
+            tm.setText((TIME_MAX / 100) - (time / 100) + "");
         } else {
-            tm.setText(100 - (time / 100) + " ");
+            tm.setText((TIME_MAX / 100) - (time / 100) + "");
         }
     }
 
